@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const { NOTES_APP_MONGODB_HOST, NOTES_APP_MONGODB_DATABASE } = process.env;
 
-const MONGODB_URI = 'mongodb+srv://usario:clave@cluster0.wtvf2.mongodb.net/DBmanglar?retryWrites=true&w=majority';
+const MONGODB_URI = 'mongodb+srv://arroyojavier855:Javier1206@cluster0.1ztcb28.mongodb.net/arboles?retryWrites=true&w=majority';
 
 
 
@@ -15,5 +15,6 @@ mongoose
   })
   .then(db => console.log("DB Mongo is connected"))
   .catch(err => console.error(err));
+
 
 

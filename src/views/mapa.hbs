@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mapa</title>
+  <!-- Incluir los estilos de Leaflet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    /* Estilos para el contenedor del mapa */
+    #map-container {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mapa</h1>
+  <div id="map-container"></div>
+
+  <!-- Incluir la biblioteca de Leaflet -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Coordenadas del centro del mapa
+    var center = [9.315274131002017, -75.38849076512143];
+
+    // Crear el mapa
+    var map = L.map('map-container').setView(center, 20);
+
+    // Crear el mapa base de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      maxZoom: 18
+    }).addTo(map);
+
+    var socket = io();
+    socket.on("agregarArbol", function(data) {
+      agregarArbol(data.nombre, data.caracteristicas, data.ubicacion);
+      map.setView(data.ubicacion, 20); // Establecer la vista en la ubicación del nuevo árbol
+    });
+
+    function agregarArbol(nombre, caracteristicas, ubicacion) {
+      var marker = L.marker(ubicacion).addTo(map);
+      marker.bindPopup("<b>" + nombre + "</b><br>" + caracteristicas);
+    }
+
+    // Obtener el formulario y agregar un evento de envío
+    var form = document.getElementById("tree-form");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault(); // Evitar el envío del formulario
+
+      // Obtener las coordenadas ingresadas por el usuario
+      var latitud = document.getElementById("latitud").value;
+      var longitud = document.getElementById("longitud").value;
+      var ubicacion = [parseFloat(latitud), parseFloat(longitud)];
+
+      // Enviar las coordenadas al servidor
+      socket.emit("agregarArbol", {
+        nombre: "Nuevo Árbol",
+        caracteristicas: "Descripción del nuevo árbol",
+        ubicacion: ubicacion
+      });
+
+      // Limpiar los campos del formulario
+      document.getElementById("latitud").value = "";
+      document.getElementById("longitud").value = "";
+    });
+  </script>
+</body>
+</html>
+

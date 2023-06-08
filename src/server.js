@@ -9,13 +9,17 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const morgan = require('morgan');
 var body_parser = require('body-parser');
-
+const http = require('http');
 const Handlebars = require('handlebars')
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 // Initializations
 const app = express();
 require('./config/passport');
+
+const server = http.createServer(app);
+const io = require("socket.io")(server);
+app.set("io", io);
 
 // settings
 app.set('port', process.env.PORT || 4000); //puerto para el servidor localhost:5000
