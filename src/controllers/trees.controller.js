@@ -1,32 +1,34 @@
 const treesCtrl = {};
 const Trees = require('../models/Trees');
+const passport = require("passport");
 
 treesCtrl.renderTreeForm = (req, res) => {
-  res.render('/trees');
+  res.render('trees');
 };
 
 treesCtrl.saveTree = async (req, res) => {
   let errors = [];
   const { latitud, longitud, caracteristicas, nombre, fecha } = req.body;
+  const containsNumbers = /\d/.test(nombre);
 
-  if (nombre != String) {
+  if (containsNumbers) {
     errors.push({ text: "El nombre no debe contener números." });
   }
 
-  if (latitud == String) {
+  if (isNaN(parseFloat(latitud))) {
     errors.push({ text: "La latitud debe ser un número." });
   }
 
-  if (longitud == String) {
+  if (isNaN(parseFloat(longitud))) {
     errors.push({ text: "La longitud debe ser un número." });
   }
 
-  if (fecha == String) {
-    errors.push({ text: "La fecha debe ser un número." });
+  if (isNaN(Date.parse(fecha))) {
+    errors.push({ text: "La fecha debe ser una fecha válida." });
   }
 
   if (errors.length > 0) {
-    res.render("/trees", {
+    res.render('trees', {
       errors,
       nombre,
       latitud,
@@ -40,14 +42,12 @@ treesCtrl.saveTree = async (req, res) => {
       longitud: parseFloat(longitud)
     };
 
-    const nuevoTree = new Trees({ nombre, ubicacion, caracteristicas });
+    const nuevoTree = new Trees({ nombre, ubicacion, caracteristicas, fecha });
     await nuevoTree.save();
     req.flash("success_msg", "El árbol fue registrado.");
 
-    // Enviar una notificación al cliente para agregar el árbol al mapa
-    req.app.get("io").emit("agregarArbol", { nombre, caracteristicas, ubicacion });
-
-    res.redirect("/trees");
+    // Redireccionar a la página del mapa
+    res.redirect('/mapa');
   }
 };
 
@@ -57,7 +57,7 @@ treesCtrl.renderMapa = async (req, res) => {
 };
 
 treesCtrl.signin = passport.authenticate("local", {
-  successRedirect: "/mapa",
+  successRedirect: "/trees",
   failureRedirect: "/trees",
   failureFlash: true
 });

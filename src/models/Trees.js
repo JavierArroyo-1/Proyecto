@@ -8,7 +8,7 @@ const TreesSchema = new Schema({
     longitud: { type: Number, required: true }
   },
   fecha: { type: Date, default: Date.now },
-  imagen: { type: File, required: true },
+
 });
 
 module.exports = model("Trees", TreesSchema);

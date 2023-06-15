@@ -5,7 +5,7 @@
         <h1 class="h4">Registro de árboles</h1>
       </div>
       <div class="card-body">
-        <form action="/mapa" method="GET">
+        <form action="/trees" method="POST">
           <div class="form-group">
             <input type="text" class="form-control" name="nombre" placeholder="Nombre">
           </div>
@@ -20,9 +20,6 @@
           </div>
           <div class="form-group">
             <input type="date" class="form-control" name="fecha" placeholder="Fecha">
-          </div>
-          <div class="form-group">
-            <input type="file" class="form-control" name="imagen" accept="image/*">
           </div>
           <button class="btn btn-primary btn-block" type="submit">Guardar árbol</button>
         </form>

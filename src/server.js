@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 // routes
 app.use(require('./routes/index.routes'));
 app.use(require('./routes/users.routes'));
-
+app.use(require('./routes/trees.routes'));
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(body_parser.urlencoded({extended:true}));
