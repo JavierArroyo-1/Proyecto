@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gráfica de barras</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="barchart" width="400" height="300"></canvas>
+
+  <script>
+    // Datos de la gráfica
+    var data = [
+      { label: 'Palmera', value: 2 },
+      { label: 'Árbol de mango', value: 1 }
+    ];
+
+    // Obtener el elemento canvas
+    var canvas = document.getElementById('barchart');
+    var ctx = canvas.getContext('2d');
+
+    // Configuración de la gráfica
+    var barWidth = 40;
+    var barSpacing = 20;
+    var maxValue = Math.max(...data.map(item => item.value));
+    var canvasHeight = canvas.height;
+    var canvasWidth = canvas.width;
+    var x = 0;
+
+    // Dibujar las barras
+    for (var i = 0; i < data.length; i++) {
+      var barHeight = (data[i].value / maxValue) * canvasHeight;
+      var y = canvasHeight - barHeight;
+      
+      ctx.fillStyle = '#007bff'; // Color de las barras
+      ctx.fillRect(x, y, barWidth, barHeight);
+
+      // Etiqueta de la barra
+      ctx.fillStyle = '#000';
+      ctx.textAlign = 'center';
+      ctx.fillText(data[i].label, x + barWidth / 2, y - 10);
+
+      // Actualizar la posición X para la siguiente barra
+      x += barWidth + barSpacing;
+    }
+    
+  </script>
+</body>
+</html>
+
+

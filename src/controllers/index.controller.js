@@ -21,4 +21,9 @@ indexCtrl.rendertrees = (req, res) => {
 indexCtrl.rendermapa = (req, res) => {
   res.render('mapa');
 };
+
+indexCtrl.rendergrafica = (req, res) => {
+  res.render('grafica');
+};
+
 module.exports = indexCtrl;
